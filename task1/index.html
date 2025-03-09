@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gross Emissions Calculator</title>
+
+    <!-- External Polyfill for ES6 features -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <!-- MathJax library to render LaTeX formulas -->
+    <script
+      type="text/javascript"
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        display: flex;
+        flex-direction: row;
+        background-color: #ffffff8b;
+      }
+
+      .content {
+        flex: 2;
+        max-width: 60%;
+      }
+
+      .sidebar {
+        position: fixed;
+        top: 50%;
+        left: 75%;
+        transform: translate(-50%, -50%);
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background: #f9f9f9;
+      }
+
+      section {
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 8px;
+      }
+
+      h3 {
+        font-weight: bold;
+        margin-bottom: 5px;
+        padding-bottom: 5px;
+        border-bottom: 3px solid #ccc;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      th,
+      td {
+        border: 1px solid black;
+        padding: 5px;
+        text-align: center;
+      }
+
+      button {
+        margin-top: 10px;
+        padding: 10px;
+      }
+
+      .formula {
+        font-style: italic;
+        margin-top: 10px;
+        background: #eef;
+        padding: 10px;
+        border-radius: 5px;
+      }
+
+      .result {
+        font-size: 1.2em;
+        font-weight: bold;
+        padding: 10px;
+        border: 2px solid #ccc;
+        background: #f5f5f5;
+        display: inline-block;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Main content area -->
+    <div class="content">
+      <h2>Gross Emissions Calculator</h2>
+
+      <!-- Coal section for input and calculation -->
+      <section>
+        <h3>Coal</h3>
+        <p>Mass: <strong>672,419.96 t</strong></p>
+        <button onclick="calculateCoal()">Calculate</button>
+        <p id="coalResult" class="result"></p>
+        <!-- Formula for coal emission calculation -->
+        <div class="formula">
+          Formula: $$ E = \frac{k_{tw} \cdot B \cdot Q_r}{10^6} $$
+        </div>
+      </section>
+
+      <!-- Fuel Oil (Mazut) section for input and calculation -->
+      <section>
+        <h3>Fuel Oil</h3>
+        <p>Mass: <strong>111,633.33 t</strong></p>
+        <button onclick="calculateMazut()">Calculate</button>
+        <p id="mazutResult" class="result"></p>
+        <!-- Formula for fuel oil emission calculation -->
+        <div class="formula">
+          Formula: $$ E = \frac{k_{tw} \cdot B \cdot Q_r}{10^6} $$
+        </div>
+      </section>
+
+      <!-- Natural Gas section for input and calculation -->
+      <section>
+        <h3>Natural Gas</h3>
+        <p>Volume: <strong>128,674.68 thousand m³</strong></p>
+        <button onclick="calculateGas()">Calculate</button>
+        <p id="gasResult" class="result"></p>
+        <!-- Description of gas emission calculation (no solid particles) -->
+        <div class="formula">
+          No solid particles are formed when burning natural gas.
+        </div>
+      </section>
+    </div>
+
+    <!-- Sidebar for parameter values -->
+    <div class="sidebar">
+      <h3>Parameter Table</h3>
+      <table>
+        <tr>
+          <th>Parameter</th>
+          <th>Value</th>
+        </tr>
+        <tr>
+          <td>Emission coefficient (Coal)</td>
+          <td><strong>150 g/GJ</strong></td>
+        </tr>
+        <tr>
+          <td>Emission coefficient (Fuel Oil)</td>
+          <td><strong>0.57 g/GJ</strong></td>
+        </tr>
+        <tr>
+          <td>Lower heating value (Coal)</td>
+          <td><strong>20.47 MJ/kg</strong></td>
+        </tr>
+        <tr>
+          <td>Lower heating value (Fuel Oil)</td>
+          <td><strong>40.40 MJ/kg</strong></td>
+        </tr>
+        <tr>
+          <td>Dust removal efficiency</td>
+          <td><strong>0.985</strong></td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Script for emission calculations -->
+    <script>
+      /**
+       * Calculates the gross emissions for coal.
+       * Uses the formula: E = (k_tw * B * Qr) / 10^6
+       */
+      function calculateCoal() {
+        const k_tw = 150; // g/GJ - Emission coefficient for coal
+        const Qr = 20.47; // MJ/kg - Lower heating value for coal
+        const B = 672419.96; // t - Mass of coal
+        const E = (k_tw * B * Qr) / 1e6; // Gross emissions in tons
+        document.getElementById(
+          "coalResult"
+        ).innerText = `Gross emission: ${E.toFixed(2)} t`;
+      }
+
+      /**
+       * Calculates the gross emissions for fuel oil (Mazut).
+       * Uses the formula: E = (k_tw * B * Qr) / 10^6
+       */
+      function calculateMazut() {
+        const k_tw = 0.57; // g/GJ - Emission coefficient for fuel oil
+        const Qr = 40.4; // MJ/kg - Lower heating value for fuel oil
+        const B = 111633.33; // t - Mass of fuel oil
+        const E = (k_tw * B * Qr) / 1e6; // Gross emissions in tons
+        document.getElementById(
+          "mazutResult"
+        ).innerText = `Gross emission: ${E.toFixed(2)} t`;
+      }
+
+      /**
+       * Displays the result for natural gas emission.
+       * Since no solid particles are formed, a specific message is displayed.
+       */
+      function calculateGas() {
+        document.getElementById(
+          "gasResult"
+        ).innerText = `No solid particles are formed when burning natural gas.`;
+      }
+    </script>
+  </body>
+</html>
